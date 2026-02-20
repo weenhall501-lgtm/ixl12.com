@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Arcade Games</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: space-around; align-items: center; height: 100vh; background-color: #f0f0f0; }
+        canvas { border: 2px solid black; }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Snake Game</h1>
+        <canvas id="snakeGame" width="400" height="400"></canvas>
+    </div>
+    <div>
+        <h1>Pong Game</h1>
+        <canvas id="pongGame" width="400" height="400"></canvas>
+    </div>
+
+    <script>
+        // Snake Game Code
+        const canvas = document.getElementById('snakeGame');
+        const ctx = canvas.getContext('2d');
+        let snake = [{x: 10, y: 10}];
+        let direction = 'RIGHT';
+        let food = {x: 5, y: 5};
+        let score = 0;
+
+        function gameLoop() {
+            requestAnimationFrame(gameLoop);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSnake();
+            drawFood();
+            moveSnake();
+            checkCollision();
+        }
+
+        function drawSnake() {
+            ctx.fillStyle = 'green';
+            snake.forEach(part => {
+                ctx.fillRect(part.x * 20, part.y * 20, 18, 18);
+            });
+        }
+
+        function drawFood() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(food.x * 20, food.y * 20, 18, 18);
+        }
+
+        function moveSnake() {
+            const head = {x: snake[0].x, y: snake[0].y};
+            if (direction === 'RIGHT') head.x++;
+            if (direction === 'LEFT') head.x--;
+            if (direction === 'UP') head.y--;
+            if (direction === 'DOWN') head.y++;
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                food = {x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20)};
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snake.slice(1).some(part => part.x === head.x && part.y === head.y)) {
+                alert('Game Over! Your score: ' + score);
+                snake = [{x: 10, y: 10}];
+                direction = 'RIGHT';
+                score = 0;
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+            else if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+            else if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+            else if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+        });
+
+        gameLoop();
+
+        // Pong Game Code
+        const pongCanvas = document.getElementById('pongGame');
+        const pongCtx = pongCanvas.getContext('2d');
+        let pongBall = {x: pongCanvas.width / 2, y: pongCanvas.height / 2, radius: 10, speedX: 5, speedY: 5};
+        let paddleWidth = 10, paddleHeight = 100;
+        let playerPaddle = {x: 0, y: pongCanvas.height / 2 - paddleHeight / 2};
+        let aiPaddle = {x: pongCanvas.width - paddleWidth, y: pongCanvas.height / 2 - paddleHeight / 2};
+
+        function drawPong() {
+            pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
+            pongCtx.fillStyle = 'black';
+            pongCtx.fillRect(playerPaddle.x, playerPaddle.y, paddleWidth, paddleHeight);
+            pongCtx.fillRect(aiPaddle.x, aiPaddle.y, paddleWidth, paddleHeight);
+            pongCtx.beginPath();
+            pongCtx.arc(pongBall.x, pongBall.y, pongBall.radius, 0, Math.PI * 2);
+            pongCtx.fillStyle = 'white';
+            pongCtx.fill();
+            pongCtx.closePath();
+        }
+
+        function movePong() {
+            pongBall.x += pongBall.speedX;
+            pongBall.y += pongBall.speedY;
+            if (pongBall.y + pongBall.radius > pongCanvas.height || pongBall.y - pongBall.radius < 0) {
+                pongBall.speedY = -pongBall.speedY;
+            }
+            if (pongBall.x - pongBall.radius < playerPaddle.x + paddleWidth && pongBall.y > playerPaddle.y && pongBall.y < playerPaddle.y + paddleHeight) {
+                pongBall.speedX = -pongBall.speedX;
+            }
+            if (pongBall.x + pongBall.radius > aiPaddle.x && pongBall.y > aiPaddle.y && pongBall.y < aiPaddle.y + paddleHeight) {
+                pongBall.speedX = -pongBall.speedX;
+            }
+            if (pongBall.x - pongBall.radius < 0 || pongBall.x + pongBall.radius > pongCanvas.width) {
+                pongBall.x = pongCanvas.width / 2;
+                pongBall.y = pongCanvas.height / 2;
+                pongBall.speedX = 5 * (Math.random() < 0.5 ? 1 : -1);
+                pongBall.speedY = 5 * (Math.random() < 0.5 ? 1 : -1);
+            }
+        }
+
+        function aiMove() {
+            if (pongBall.y > aiPaddle.y + paddleHeight / 2) aiPaddle.y += 5;
+            else if (pongBall.y < aiPaddle.y + paddleHeight / 2) aiPaddle.y -= 5;
+        }
+
+        function pongLoop() {
+            drawPong();
+            movePong();
+            aiMove();
+            requestAnimationFrame(pongLoop);
+        }
+
+        pongLoop();
+    </script>
+</body>
+</html>
