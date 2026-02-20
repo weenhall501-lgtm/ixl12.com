@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crazy Arcade</title>
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            color: #f0f;
+            text-shadow: 0 0 20px #0ff;
+        }
+        .game {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+            border: 5px solid #f0f;
+            border-radius: 15px;
+            box-shadow: 0 0 10px #ff0;
+            transition: transform 0.3s;
+        }
+        .game:hover {
+            transform: scale(1.1);
+        }
+        .button {
+            background-color: #ff0;
+            color: #222;
+            border: none;
+            padding: 15px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Crazy Arcade</h1>
+    <div class="game"><h2>Snake</h2> <!-- Add Snake Game Script Here --> </div>
+    <div class="game"><h2>Pong</h2> <!-- Add Pong Game Script Here --> </div>
+    <div class="game"><h2>Flappy Bird</h2> <!-- Add Flappy Bird Game Script Here --> </div>
+    <div class="game"><h2>Space Invaders</h2> <!-- Add Space Invaders Game Script Here --> </div>
+    <div class="game"><h2>Breakout</h2> <!-- Add Breakout Game Script Here --> </div>
+    <div class="game"><h2>Memory Match</h2> <!-- Add Memory Match Game Script Here --> </div>
+    <div class="game"><h2>Whack-a-Mole</h2> <!-- Add Whack-a-Mole Game Script Here --> </div>
+    <div style="text-align: center;">
+        <button class="button">Play All</button>
+        <button class="button">Select Game</button>
+    </div>
+    <script>
+        // Game Logic Here
+    </script>
+</body>
+</html>
